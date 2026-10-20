@@ -24,7 +24,7 @@ import com.lightcraft.internetspeedmeter.utils.NotificationIconGenerator
 class SpeedMeterService : Service() {
 
     companion object {
-        const val CHANNEL_ID = "speed_meter_channel_v1"
+        const val CHANNEL_ID = "speed_meter_channel_v2"
         const val NOTIFICATION_ID = 1001
         const val ACTION_SPEED_UPDATED = "com.lightcraft.internetspeedmeter.SPEED_UPDATED"
         const val EXTRA_DOWNLOAD_SPEED = "extra_download_speed"
@@ -112,6 +112,18 @@ class SpeedMeterService : Service() {
 
         startSampling()
         return START_STICKY
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        if (prefs.isServiceEnabled) {
+            val restartIntent = Intent(applicationContext, SpeedMeterService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                applicationContext.startForegroundService(restartIntent)
+            } else {
+                applicationContext.startService(restartIntent)
+            }
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -236,7 +248,7 @@ class SpeedMeterService : Service() {
             .setContentIntent(contentIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         if (prefs.statusBarIconMode == AppPreferences.ICON_MODE_NUMBER) {
@@ -265,10 +277,12 @@ class SpeedMeterService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.notification_channel_name),
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = getString(R.string.notification_channel_desc)
-                setShowBadge(false)
+                setSound(null, null)
+                enableVibration(false)
+                setShowBadge(true)
             }
             notificationManager.createNotificationChannel(channel)
         }
