@@ -16,7 +16,7 @@ object NotificationIconGenerator {
     }
 
     fun drawSpeedBitmap(value: String, unit: String): Bitmap {
-        val size = 96
+        val size = 64
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
@@ -26,14 +26,14 @@ object NotificationIconGenerator {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
 
-        // Top value string (e.g., "2.5" or "450")
-        textPaint.textSize = if (value.length > 3) 38f else 46f
-        canvas.drawText(value, size / 2f, 48f, textPaint)
+        // Top value string (e.g. "40", "1.2", "450")
+        textPaint.textSize = if (value.length > 3) 26f else 32f
+        canvas.drawText(value, size / 2f, 28f, textPaint)
 
-        // Bottom unit string (e.g., "M" or "K")
-        textPaint.textSize = 34f
+        // Bottom unit string (e.g. "B", "K", "M", "G")
+        textPaint.textSize = 24f
         textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        canvas.drawText(unit, size / 2f, 84f, textPaint)
+        canvas.drawText(unit, size / 2f, 54f, textPaint)
 
         return bitmap
     }

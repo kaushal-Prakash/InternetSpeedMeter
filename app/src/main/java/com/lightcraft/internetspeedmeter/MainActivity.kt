@@ -23,6 +23,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -113,6 +116,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, insets ->
+            val statusBarInset = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(view.paddingLeft, statusBarInset.top, view.paddingRight, view.paddingBottom)
+            insets
+        }
+
         val toolbar = findViewById<MaterialToolbar>(R.id.topToolbar)
         toolbar.setOnMenuItemClickListener { menuItem ->
             if (menuItem.itemId == R.id.action_settings) {
