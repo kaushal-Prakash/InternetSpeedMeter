@@ -109,23 +109,23 @@ object NetworkUtils {
     }
 
     fun formatCompactSpeed(bytesPerSec: Long, useBits: Boolean): Pair<String, String> {
-        if (bytesPerSec <= 0) return Pair("0", if (useBits) "k" else "K")
+        if (bytesPerSec <= 0) return Pair("0", if (useBits) "b/s" else "B/s")
 
         if (useBits) {
             val bits = bytesPerSec * 8.0
             return when {
-                bits >= 1_000_000_000 -> Pair(String.format(Locale.US, "%.1f", bits / 1_000_000_000), "G")
-                bits >= 1_000_000 -> Pair(String.format(Locale.US, "%.1f", bits / 1_000_000), "M")
-                bits >= 1000 -> Pair(String.format(Locale.US, "%.0f", bits / 1000), "k")
-                else -> Pair(String.format(Locale.US, "%d", (bits).toLong()), "b")
+                bits >= 1_000_000_000 -> Pair(String.format(Locale.US, "%.1f", bits / 1_000_000_000), "Gbps")
+                bits >= 1_000_000 -> Pair(String.format(Locale.US, "%.1f", bits / 1_000_000), "Mbps")
+                bits >= 1000 -> Pair(String.format(Locale.US, "%.0f", bits / 1000), "Kbps")
+                else -> Pair(String.format(Locale.US, "%d", (bits).toLong()), "b/s")
             }
         } else {
             val b = bytesPerSec.toDouble()
             return when {
-                b >= 1073741824 -> Pair(String.format(Locale.US, "%.1f", b / 1073741824), "G")
-                b >= 1048576 -> Pair(String.format(Locale.US, "%.1f", b / 1048576), "M")
-                b >= 1024 -> Pair(String.format(Locale.US, "%.0f", b / 1024), "K")
-                else -> Pair(String.format(Locale.US, "%d", bytesPerSec), "B")
+                b >= 1073741824 -> Pair(String.format(Locale.US, "%.1f", b / 1073741824), "GB/s")
+                b >= 1048576 -> Pair(String.format(Locale.US, "%.1f", b / 1048576), "MB/s")
+                b >= 1024 -> Pair(String.format(Locale.US, "%.0f", b / 1024), "KB/s")
+                else -> Pair(String.format(Locale.US, "%d", bytesPerSec), "B/s")
             }
         }
     }
