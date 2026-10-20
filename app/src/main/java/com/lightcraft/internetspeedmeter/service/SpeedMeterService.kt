@@ -242,7 +242,7 @@ class SpeedMeterService : Service() {
         val content = "Today: Mobile $mobileStr, Wi-Fi $wifiStr ($netTypeName)"
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_stat_speed)
+            .setSmallIcon(R.drawable.ic_app_logo)
             .setContentTitle(title)
             .setContentText(content)
             .setContentIntent(contentIntent)
