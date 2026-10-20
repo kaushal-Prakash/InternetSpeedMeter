@@ -16,10 +16,8 @@ object NotificationIconGenerator {
     }
 
     fun drawSpeedBitmap(value: String, unit: String): Bitmap {
-        val fullText = "$value $unit"
-        val width = 160
-        val height = 64
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val size = 96
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -28,13 +26,18 @@ object NotificationIconGenerator {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
 
+        // Top line: Number (e.g. "1", "40", "2.5", "450") - Extra Big & Bold
         textPaint.textSize = when {
-            fullText.length > 8 -> 24f
-            fullText.length > 6 -> 28f
-            else -> 32f
+            value.length > 3 -> 38f
+            value.length == 3 -> 44f
+            else -> 50f
         }
+        canvas.drawText(value, size / 2f, 44f, textPaint)
 
-        canvas.drawText(fullText, width / 2f, 42f, textPaint)
+        // Bottom line: Unit (e.g. "KB/s", "MB/s", "B/s") - Extra Big & Bold
+        textPaint.textSize = if (unit.length > 4) 26f else 30f
+        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText(unit, size / 2f, 82f, textPaint)
 
         return bitmap
     }
