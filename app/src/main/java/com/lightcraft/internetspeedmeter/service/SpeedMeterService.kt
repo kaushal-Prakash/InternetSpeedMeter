@@ -250,6 +250,10 @@ class SpeedMeterService : Service() {
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setSortKey("0_speed_meter")
+            .setShowWhen(false)
 
         if (prefs.statusBarIconMode == AppPreferences.ICON_MODE_NUMBER) {
             val icon = NotificationIconGenerator.createSpeedIcon(downBytesPerSec, prefs.useBitsPerSecond)
