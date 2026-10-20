@@ -16,31 +16,34 @@ object NotificationIconGenerator {
     }
 
     fun drawSpeedBitmap(value: String, unit: String): Bitmap {
-        val size = 192
+        val size = 256
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         val textPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG).apply {
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
-            typeface = Typeface.create("sans-serif-bold", Typeface.BOLD)
+            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+            style = Paint.Style.FILL_AND_STROKE
+            strokeWidth = 4f
             isFilterBitmap = true
             isDither = true
             hinting = Paint.HINTING_ON
         }
 
-        // Top line: Number (e.g. "1", "40", "2.5", "450") - High-Res Crisp & Bold
+        // Top line: Number (e.g. "1", "40", "2.5", "450") - Ultra-Thick, Bold & Sharp
         textPaint.textSize = when {
-            value.length > 3 -> 72f
-            value.length == 3 -> 86f
-            else -> 98f
+            value.length > 3 -> 90f
+            value.length == 3 -> 108f
+            else -> 126f
         }
-        canvas.drawText(value, size / 2f, 88f, textPaint)
+        textPaint.strokeWidth = 5f
+        canvas.drawText(value, size / 2f, 115f, textPaint)
 
-        // Bottom line: Unit (e.g. "KB/s", "MB/s", "B/s") - High-Res Crisp & Bold
-        textPaint.textSize = if (unit.length > 4) 50f else 58f
-        textPaint.typeface = Typeface.create("sans-serif-bold", Typeface.BOLD)
-        canvas.drawText(unit, size / 2f, 160f, textPaint)
+        // Bottom line: Unit (e.g. "KB/s", "MB/s", "B/s") - Ultra-Thick, Bold & Sharp
+        textPaint.textSize = if (unit.length > 4) 62f else 74f
+        textPaint.strokeWidth = 4f
+        canvas.drawText(unit, size / 2f, 212f, textPaint)
 
         return bitmap
     }
