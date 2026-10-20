@@ -16,28 +16,31 @@ object NotificationIconGenerator {
     }
 
     fun drawSpeedBitmap(value: String, unit: String): Bitmap {
-        val size = 96
+        val size = 192
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
-        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG).apply {
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            typeface = Typeface.create("sans-serif-bold", Typeface.BOLD)
+            isFilterBitmap = true
+            isDither = true
+            hinting = Paint.HINTING_ON
         }
 
-        // Top line: Number (e.g. "1", "40", "2.5", "450") - Extra Big & Bold
+        // Top line: Number (e.g. "1", "40", "2.5", "450") - High-Res Crisp & Bold
         textPaint.textSize = when {
-            value.length > 3 -> 38f
-            value.length == 3 -> 44f
-            else -> 50f
+            value.length > 3 -> 72f
+            value.length == 3 -> 86f
+            else -> 98f
         }
-        canvas.drawText(value, size / 2f, 44f, textPaint)
+        canvas.drawText(value, size / 2f, 88f, textPaint)
 
-        // Bottom line: Unit (e.g. "KB/s", "MB/s", "B/s") - Extra Big & Bold
-        textPaint.textSize = if (unit.length > 4) 26f else 30f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText(unit, size / 2f, 82f, textPaint)
+        // Bottom line: Unit (e.g. "KB/s", "MB/s", "B/s") - High-Res Crisp & Bold
+        textPaint.textSize = if (unit.length > 4) 50f else 58f
+        textPaint.typeface = Typeface.create("sans-serif-bold", Typeface.BOLD)
+        canvas.drawText(unit, size / 2f, 160f, textPaint)
 
         return bitmap
     }
