@@ -92,7 +92,7 @@ class SpeedMeterService : Service() {
         registerScreenReceiver()
 
         startForegroundServiceWithNotification(
-            buildNotification("0 B/s", "0 B/s", NetworkType.NONE, 0L, 0L)
+            buildNotification("0 B/s", "0 B/s", 0L, NetworkType.NONE, 0L, 0L)
         )
 
         startSampling()
@@ -181,7 +181,14 @@ class SpeedMeterService : Service() {
         val upFormatted = NetworkUtils.formatSpeed(sample.uploadSpeedBytesPerSec, useBits)
 
         // Update Notification
-        val notification = buildNotification(downFormatted, upFormatted, sample.networkType, prefs.todayWifiTotal, prefs.todayMobileTotal)
+        val notification = buildNotification(
+            downFormatted,
+            upFormatted,
+            sample.downloadSpeedBytesPerSec,
+            sample.networkType,
+            prefs.todayWifiTotal,
+            prefs.todayMobileTotal
+        )
         notificationManager.notify(NOTIFICATION_ID, notification)
 
         // Broadcast to MainActivity if active
@@ -197,6 +204,7 @@ class SpeedMeterService : Service() {
     private fun buildNotification(
         downStr: String,
         upStr: String,
+        downBytesPerSec: Long,
         networkType: NetworkType,
         wifiBytes: Long,
         mobileBytes: Long
@@ -232,8 +240,7 @@ class SpeedMeterService : Service() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         if (prefs.statusBarIconMode == AppPreferences.ICON_MODE_NUMBER) {
-            val bytesForIcon = NetworkUtils.sampleSpeed(this).downloadSpeedBytesPerSec
-            val icon = NotificationIconGenerator.createSpeedIcon(bytesForIcon, prefs.useBitsPerSecond)
+            val icon = NotificationIconGenerator.createSpeedIcon(downBytesPerSec, prefs.useBitsPerSecond)
             builder.setSmallIcon(icon)
         }
 
